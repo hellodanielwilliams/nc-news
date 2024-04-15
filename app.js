@@ -24,7 +24,12 @@ app.use((req, res, next) => {
 
 // middleware err handling 
 
-
+app.use((err, req, res, next) => {
+    if (err.status && err.msg) {
+        res.status(err.status).send({ msg: err.msg });
+    }
+    next(err)
+})
 
 // default to 500 error for any uncaught errors:
 app.use((err, req, res, next) => {
