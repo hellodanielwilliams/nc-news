@@ -45,3 +45,24 @@ describe ('/api/topics', () => {
         })
     })
 })
+
+describe('/api/articles/:article_id', () => {
+    test('GET 200: responds with article object with the requested id with all required properties', () => {
+        return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then(({ body }) => {
+            const { article } = body
+            const { author,  title, article_id, topic, created_at, votes, article_img_url } = article
+            expect(article_id).toBe(1)
+            expect(title).toBe('Living in the shadow of a great man')
+            expect(author).toBe('butter_bridge')
+            expect(topic).toBe('mitch')
+            expect(article.body).toBe('I find this existence challenging')
+            expect(created_at).toBe('2020-07-09T20:11:00.000Z')
+            expect(votes).toBe(100)
+            expect(article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
+        })
+    })
+  
+})
