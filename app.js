@@ -1,17 +1,17 @@
 const express = require('express')
 const endpoints = require('./endpoints.json')
 const { getTopics } = require('./controllers/topics.controllers')
-const { getArticleById } = require('./controllers/articles.controllers')
+const { getArticleById, getArticles } = require('./controllers/articles.controllers')
 
 const app = express()
 
 // endpoints:
 
-app.get('/api', (req, res, next) => {
-    res.status(200).send(endpoints)
-})
+app.get('/api', (req, res, next) => res.status(200).send(endpoints))
 
 app.get('/api/topics', getTopics)
+
+app.get('/api/articles', getArticles)
 
 app.get('/api/articles/:article_id', getArticleById)
 
@@ -40,7 +40,7 @@ app.use((err, req, res, next) => {
   })
 // default to 500 error for any uncaught errors:
 app.use((err, req, res, next) => {
-    console.log(err, '<-- err at end')
+    //console.log(err, '<-- err at end')
     res.status(500).send({ msg: 'Internal server error'})
 })
 
