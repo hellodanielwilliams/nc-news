@@ -1,8 +1,11 @@
 const express = require('express')
+const { getTopics } = require('./controllers/topics.controllers')
 
 const app = express()
 
-// endpoints to be defined:
+// endpoints:
+
+app.get('/api/topics', getTopics)
 
 
 // respond with 404 for any undefined endpoints:

@@ -17,3 +17,19 @@ describe ('/api/does-not-exist', () => {
         })
     })
 })
+
+describe ('/api/topics', () => {
+    test('GET 200: responds with an array of topic objects, each with slug and description properties', () => {
+        return request(app)
+        .get('/api/topics')
+        .expect(200)
+        .then(({ body }) => {
+            const { topics } = body
+            expect(topics.length).toBe(3)
+            topics.forEach((topic) => {
+                expect(typeof topic.description).toBe('string')
+                expect(typeof topic.slug).toBe('string')
+            })
+        })
+    })
+})
