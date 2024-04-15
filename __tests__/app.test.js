@@ -46,6 +46,49 @@ describe ('/api/topics', () => {
     })
 })
 
+describe('/api/articles', () => {
+    test('GET 200: responds with an articles array of article objects with all article properties but no body', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+            console.log(body, '<<< body in test')
+            const { articles } = body
+            expect(articles.length).toBe(13)
+            articles.forEach((article) => {
+                const { author, title, article_id, topic, created_at, votes, article_img_url } = article
+                expect(typeof author).toBe('string')
+                expect(typeof title).toBe('string')
+                expect(typeof article_id).toBe('number')
+                expect(typeof created_at).toBe('string')
+                expect(typeof votes).toBe('number')
+                expect(typeof article_img_url).toBe('string')
+                expect(typeof topic).toBe('string')
+                expect(article).not.toHaveProperty('body')
+            })
+        })
+    })
+    test('GET 200: responds with correct comment_count from comments table via JOIN on article_id, parsed into a number', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+            const { articles } = body
+            const test_article = articles[0]
+            expect(test_article.comment_count).toBe(2)
+        })
+    })
+    test('GET 200: responds with articles sorted in descending date order by default', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+            const { articles } = body
+            expect(articles).toBeSortedBy('created_at', {descending: true})
+        })
+    })
+})
+
 describe('/api/articles/:article_id', () => {
     test('GET 200: responds with article object with the requested id with all required properties', () => {
         return request(app)

@@ -11,7 +11,7 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": [],
     "exampleResponse": {
       "articles": [
         {
@@ -27,8 +27,7 @@
     }
   },
   "GET /api/articles/:article_id": {
-    "description": "serves one article with article_id specified in endpoint",
-    "params": ["article_id"],
+    "description": "serves the article with the article_id specified in endpoint",
     "queries": [],
     "exampleResponse": {
       "article": [
