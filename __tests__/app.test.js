@@ -18,6 +18,18 @@ describe ('/api/does-not-exist', () => {
     })
 })
 
+describe('/api', () => {
+    test('GET 200: responds with an object describing all the available endpoints on the API', () => {
+        const endpoints = require('../endpoints.json')
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({ body }) => {
+            expect(body).toEqual(endpoints)
+        })
+    })
+})
+
 describe ('/api/topics', () => {
     test('GET 200: responds with an array of topic objects, each with slug and description properties', () => {
         return request(app)
