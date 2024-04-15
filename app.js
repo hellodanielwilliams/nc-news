@@ -5,7 +5,6 @@ const { getArticleById } = require('./controllers/articles.controllers')
 
 const app = express()
 
-app.use(express.json())
 // endpoints:
 
 app.get('/api', (req, res, next) => {
@@ -31,8 +30,17 @@ app.use((err, req, res, next) => {
     next(err)
 })
 
+app.use((err, req, res, next) => {
+    if(err.code) {
+        if(err.code === '22P02') {
+            res.status(400).send({ msg: 'Bad request'})
+      }
+    }
+    next(err)
+  })
 // default to 500 error for any uncaught errors:
 app.use((err, req, res, next) => {
+    console.log(err, '<-- err at end')
     res.status(500).send({ msg: 'Internal server error'})
 })
 

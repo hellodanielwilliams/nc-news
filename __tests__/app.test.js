@@ -64,7 +64,7 @@ describe('/api/articles/:article_id', () => {
             expect(article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
         })
     })
-    test('GET 404: Responds with a not found error if article_id is valid but does not exist in db', () => {
+    test('GET 404: responds with a not found error if article_id is valid but does not exist in db', () => {
         return request(app)
         .get('/api/articles/9999')
         .expect(404)
@@ -72,4 +72,12 @@ describe('/api/articles/:article_id', () => {
             expect(body.msg).toBe('Article not found');
         });
     })
+    test('GET 400: responds with a bad request error if article_id is not valid', () => {
+        return request(app)
+          .get('/api/articles/not-a-number')
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe('Bad request');
+          });
+      });
 })
