@@ -184,7 +184,16 @@ describe('/api/articles/:article_id/comments', () => {
             expect(typeof created_at).toBe('string')        
         })
     })
-    // 400 bad request for malformed object
+    test('POST 400: responds with a bad request message if comment object is malformed', () => {
+        const testComment = { non_valid_key : 'lurker' }
+        return request(app)
+        .post('/api/articles/2/comments')
+        .send(testComment)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
     // 404 article not found
     // 404 username not found (?)
     // 400 article_id invalid
