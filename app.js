@@ -2,9 +2,11 @@ const express = require('express')
 const endpoints = require('./endpoints.json')
 const { getTopics } = require('./controllers/topics.controllers')
 const { getArticleById, getArticles } = require('./controllers/articles.controllers')
-const { getCommentsByArticleId } = require('./controllers/comments.controllers')
+const { getCommentsByArticleId, postCommentByArticleId } = require('./controllers/comments.controllers')
 
 const app = express()
+
+app.use(express.json())
 
 // endpoints:
 
@@ -17,6 +19,8 @@ app.get('/api/articles', getArticles)
 app.get('/api/articles/:article_id', getArticleById)
 
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
+
+app.post('/api/articles/:article_id/comments', postCommentByArticleId)
 
 
 // respond with 404 for any undefined endpoints:
@@ -35,9 +39,12 @@ app.use((err, req, res, next) => {
 
 app.use((err, req, res, next) => {
     if(err.code) {
-        if(err.code === '22P02') {
+        if(err.code === '22P02' || err.code === '23502') {
             res.status(400).send({ msg: 'Bad request'})
-      }
+        }
+        if(err.code === '23503') {
+            res.status(404).send({ msg: 'Article not found'})
+        }
     }
     next(err)
   })
