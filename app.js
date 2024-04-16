@@ -54,7 +54,6 @@ app.use((err, req, res, next) => {
   })
 // default to 500 error for any uncaught errors:
 app.use((err, req, res, next) => {
-
     res.status(500).send({ msg: 'Internal server error'})
 })
 

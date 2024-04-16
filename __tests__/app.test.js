@@ -298,4 +298,12 @@ describe('/api/comments/:comment_id', () => {
             expect(body.msg).toBe('Comment not found')
         })
     })
+    test('DELETE 400: responds with a bad request error if the comment_id is invalid', () => {
+        return request(app)
+        .delete('/api/comments/not_a_number')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
 })
