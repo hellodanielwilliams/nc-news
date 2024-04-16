@@ -111,17 +111,17 @@ describe('/api/articles/:article_id', () => {
         .get('/api/articles/9999')
         .expect(404)
         .then(({ body }) => {
-            expect(body.msg).toBe('Article not found');
-        });
+            expect(body.msg).toBe('Article not found')
+        })
     })
     test('GET 400: responds with a bad request error if article_id is not valid', () => {
         return request(app)
-          .get('/api/articles/not-a-number')
-          .expect(400)
-          .then(({ body }) => {
-            expect(body.msg).toBe('Bad request');
-          });
-      });
+            .get('/api/articles/not-a-number')
+            .expect(400)
+            .then(({ body }) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
 })
 
 describe('/api/articles/:article_id/comments', () => {
@@ -157,7 +157,15 @@ describe('/api/articles/:article_id/comments', () => {
         .get('/api/articles/9999/comments')
         .expect(404)
         .then(({ body: { msg } }) => {
-            expect(msg).toBe('Article not found');
+            expect(msg).toBe('Article not found')
         });
     })
+    test('GET 400: responds with a bad request error if article_id is not valid', () => {
+        return request(app)
+            .get('/api/articles/not-a-number/comments')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+            expect(msg).toBe('Bad request')
+        })
+    })  
 })
