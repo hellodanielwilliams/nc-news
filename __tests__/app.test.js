@@ -194,8 +194,17 @@ describe('/api/articles/:article_id/comments', () => {
             expect(body.msg).toBe('Bad request')
         })
     })
-    // 404 article not found
-    // 404 username not found (?)
+    test('POST 404: responds with a not found error if article_id is valid but does not exist in db', () => {
+        const testComment = { username: 'lurker', body: 'an example comment body'}
+        return request(app)
+        .post('/api/articles/9999/comments')
+        .send(testComment)
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Article not found')
+        })
+    })
+    // 404 username not found
     // 400 article_id invalid
     
 })

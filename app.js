@@ -41,14 +41,15 @@ app.use((err, req, res, next) => {
     if(err.code) {
         if(err.code === '22P02' || err.code === '23502') {
             res.status(400).send({ msg: 'Bad request'})
-      }
+        }
+        if(err.code === '23503') {
+            res.status(404).send({ msg: 'Article not found'})
+        }
     }
     next(err)
   })
 // default to 500 error for any uncaught errors:
 app.use((err, req, res, next) => {
-    console.log(err, '<-- err at end')
-
     res.status(500).send({ msg: 'Internal server error'})
 })
 
