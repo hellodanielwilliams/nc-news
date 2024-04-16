@@ -2,6 +2,7 @@ const express = require('express')
 const endpoints = require('./endpoints.json')
 const { getTopics } = require('./controllers/topics.controllers')
 const { getArticleById, getArticles } = require('./controllers/articles.controllers')
+const { getCommentsByArticleId } = require('./controllers/comments.controllers')
 
 const app = express()
 
@@ -14,6 +15,8 @@ app.get('/api/topics', getTopics)
 app.get('/api/articles', getArticles)
 
 app.get('/api/articles/:article_id', getArticleById)
+
+app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
 
 
 // respond with 404 for any undefined endpoints:
@@ -40,7 +43,6 @@ app.use((err, req, res, next) => {
   })
 // default to 500 error for any uncaught errors:
 app.use((err, req, res, next) => {
-    //console.log(err, '<-- err at end')
     res.status(500).send({ msg: 'Internal server error'})
 })
 

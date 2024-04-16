@@ -52,7 +52,6 @@ describe('/api/articles', () => {
         .get('/api/articles')
         .expect(200)
         .then(({ body }) => {
-            console.log(body, '<<< body in test')
             const { articles } = body
             expect(articles.length).toBe(13)
             articles.forEach((article) => {
@@ -112,15 +111,67 @@ describe('/api/articles/:article_id', () => {
         .get('/api/articles/9999')
         .expect(404)
         .then(({ body }) => {
-            expect(body.msg).toBe('Article not found');
+            expect(body.msg).toBe('Article not found')
+        })
+    })
+    test('GET 400: responds with a bad request error if article_id is not valid', () => {
+        return request(app)
+            .get('/api/articles/not-a-number')
+            .expect(400)
+            .then(({ body }) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+})
+
+describe('/api/articles/:article_id/comments', () => {
+    test('GET 200: responds with array of comments for the given article_id with all correct properties', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({ body: { comments } }) => {
+            expect(comments.length).toBe(11)
+            comments.forEach((comment => {
+                const {comment_id, votes, created_at, author, body, article_id} = comment
+                expect(typeof comment_id).toBe('number')
+                expect(typeof votes).toBe('number')
+                expect(typeof created_at).toBe('string')
+                expect(typeof author).toBe('string')
+                expect(typeof body).toBe('string')
+                expect(typeof article_id).toBe('number')
+            }))
+        })
+    })
+    test('Get 200: responds with comments array ordered in date descending by default', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({ body: { comments } }) => {
+            expect(comments).toBeSortedBy('created_at', { descending: true })
+        })
+    })
+    test('GET 404: responds with a not found error if article_id is valid but does not exist in db', () => {
+        return request(app)
+        .get('/api/articles/9999/comments')
+        .expect(404)
+        .then(({ body: { msg } }) => {
+            expect(msg).toBe('Article not found')
         });
     })
     test('GET 400: responds with a bad request error if article_id is not valid', () => {
         return request(app)
-          .get('/api/articles/not-a-number')
-          .expect(400)
-          .then(({ body }) => {
-            expect(body.msg).toBe('Bad request');
-          });
-      });
+            .get('/api/articles/not-a-number/comments')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+            expect(msg).toBe('Bad request')
+        })
+    })
+    test('GET 200: responds with an empty array if the article_id exists but has no comments', () => {
+        return request(app)
+        .get('/api/articles/2/comments')
+        .expect(200)
+        .then(({ body: { comments } }) => {
+            expect(comments).toHaveLength(0)
+        })
+    })
 })
