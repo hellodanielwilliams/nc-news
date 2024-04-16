@@ -16,10 +16,11 @@ exports.postCommentByArticleId = (req, res, next) => {
     const { article_id } = req.params
     const body = req.body
     const { username } = body
-   
-    return Promise.all([insertCommentByArticleId(article_id, body), checkUserExists(username), checkArticleExists(article_id)])
-    .then(([ comment ]) => {
-        res.status(201).send({ comment })
+    return checkUserExists(username).then(()=> {
+        return Promise.all([insertCommentByArticleId(article_id, body), checkArticleExists(article_id)])
+        .then(([ comment ]) => {
+            res.status(201).send({ comment })
+        }) 
     })
     .catch(next)
 }
