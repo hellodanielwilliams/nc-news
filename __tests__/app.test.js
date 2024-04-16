@@ -184,7 +184,7 @@ describe('/api/articles/:article_id/comments', () => {
             expect(typeof created_at).toBe('string')        
         })
     })
-    test('POST 400: responds with a bad request message if comment object is malformed', () => {
+    test('POST 400: responds with a bad request message if comment object does not have username key', () => {
         const testComment = { non_valid_key : 'lurker' }
         return request(app)
         .post('/api/articles/2/comments')
@@ -204,7 +204,27 @@ describe('/api/articles/:article_id/comments', () => {
             expect(body.msg).toBe('Article not found')
         })
     })
-    // 404 username not found
+    test('POST 404: responds with a not found if username in comment object is not in users table', () => {
+        const testComment = { username: 'not_real_user', body: 'an example comment body'}
+        return request(app)
+        .post('/api/articles/2/comments')
+        .send(testComment)
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Username not found')
+        })
+    })
+    test('POST 400: responds with bad request if username is valid but object is otherwise malformed', () => {
+        const testComment = { username: 'lurker', not_valid_key : 'an example comment body'}
+        return request(app)
+        .post('/api/articles/2/comments')
+        .send(testComment)
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+
     // 400 article_id invalid
     
 })
