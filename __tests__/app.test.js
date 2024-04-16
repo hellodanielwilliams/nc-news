@@ -116,6 +116,54 @@ describe('/api/articles/:article_id', () => {
             expect(body.msg).toBe('Bad request')
         })
     })
+    test('PATCH 200: responds with correctly updated votes in article object', () => {
+        const testPatch = { inc_votes : 1 } 
+        return request(app)
+        .patch('/api/articles/1')
+        .send(testPatch)
+        .expect(200)
+        .then(({ body: { article }}) => {
+            const { author,  title, article_id, topic, created_at, votes, article_img_url } = article
+            expect(votes).toBe(101)
+            expect(article_id).toBe(1)
+            expect(title).toBe('Living in the shadow of a great man')
+            expect(author).toBe('butter_bridge')
+            expect(topic).toBe('mitch')
+            expect(article.body).toBe('I find this existence challenging')
+            expect(created_at).toBe('2020-07-09T20:11:00.000Z')
+            expect(article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
+        })
+    })
+    test('PATCH 400: responds with a bad request error if sent a malformed votes object', () => {
+        const testPatch = { not_valid : 1 } 
+        return request(app)
+        .patch('/api/articles/1')
+        .send(testPatch)
+        .expect(400)
+        .then(({ body}) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+    test('PATCH 404: responds with not found error if article_id is valid but nonexistent in db', () => {
+        const testPatch = { inc_votes : 1 } 
+        return request(app)
+        .patch('/api/articles/9999')
+        .send(testPatch)
+        .expect(404)
+        .then(({ body })  => {
+            expect(body.msg).toBe('Article not found')
+        })
+    })
+    test('PATCH 400: responds with bad request error if article_id is invalid', () => {
+        const testPatch = { inc_votes : 1 } 
+        return request(app)
+        .patch('/api/articles/not_a_number')
+        .send(testPatch)
+        .expect(400)
+        .then(({ body })  => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
 })
 
 describe('/api/articles/:article_id/comments', () => {
