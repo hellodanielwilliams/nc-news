@@ -290,4 +290,12 @@ describe('/api/comments/:comment_id', () => {
         .delete('/api/comments/1')
         .expect(204)
     })
+    test('DELETE 404: responds with a not found error if comment_id valid but not found in db', () => {
+        return request(app)
+        .delete('/api/comments/9999')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Comment not found')
+        })
+    })
 })
