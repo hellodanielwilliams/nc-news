@@ -35,9 +35,8 @@ describe ('/api/topics', () => {
         return request(app)
         .get('/api/topics')
         .expect(200)
-        .then(({ body }) => {
-            const { topics } = body
-            expect(topics.length).toBe(3)
+        .then(({ body: { topics } }) => {
+            expect(topics).toHaveLength(3)
             topics.forEach((topic) => {
                 expect(typeof topic.description).toBe('string')
                 expect(typeof topic.slug).toBe('string')
@@ -51,9 +50,8 @@ describe('/api/articles', () => {
         return request(app)
         .get('/api/articles')
         .expect(200)
-        .then(({ body }) => {
-            const { articles } = body
-            expect(articles.length).toBe(13)
+        .then(({ body: { articles } }) => {
+            expect(articles).toHaveLength(13)
             articles.forEach((article) => {
                 const { author, title, article_id, topic, created_at, votes, article_img_url } = article
                 expect(typeof author).toBe('string')
@@ -71,9 +69,7 @@ describe('/api/articles', () => {
         return request(app)
         .get('/api/articles')
         .expect(200)
-        .then(({ body }) => {
-            const { articles } = body
-            const test_article = articles[0]
+        .then(({ body: { articles: [ test_article ] } }) => {
             expect(test_article.comment_count).toBe(2)
         })
     })
@@ -81,8 +77,7 @@ describe('/api/articles', () => {
         return request(app)
         .get('/api/articles')
         .expect(200)
-        .then(({ body }) => {
-            const { articles } = body
+        .then(({ body: { articles } }) => {
             expect(articles).toBeSortedBy('created_at', {descending: true})
         })
     })
@@ -93,8 +88,7 @@ describe('/api/articles/:article_id', () => {
         return request(app)
         .get('/api/articles/1')
         .expect(200)
-        .then(({ body }) => {
-            const { article } = body
+        .then(({ body: { article } }) => {
             const { author,  title, article_id, topic, created_at, votes, article_img_url } = article
             expect(article_id).toBe(1)
             expect(title).toBe('Living in the shadow of a great man')
