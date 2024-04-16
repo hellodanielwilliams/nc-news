@@ -78,6 +78,10 @@
   "POST /api/articles/:article_id/comments": {
     "description": "posts a comment with article_id defined in endpoint, serves back comment posted",
     "queries": [],
+    "exampleRequest": { 
+      "username": "lurker", 
+      "body": "an example comment body"
+    },
     "exampleResponse": {
       "comment": {
           "comment_id": 19,
