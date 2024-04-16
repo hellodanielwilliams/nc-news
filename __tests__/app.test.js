@@ -284,3 +284,26 @@ describe('/api/articles/:article_id/comments', () => {
     }) 
 })
 
+describe('/api/comments/:comment_id', () => {
+    test('DELETE 204: deletes the specified comment and sends no body back', () => {
+        return request(app)
+        .delete('/api/comments/1')
+        .expect(204)
+    })
+    test('DELETE 404: responds with a not found error if comment_id valid but not found in db', () => {
+        return request(app)
+        .delete('/api/comments/9999')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Comment not found')
+        })
+    })
+    test('DELETE 400: responds with a bad request error if the comment_id is invalid', () => {
+        return request(app)
+        .delete('/api/comments/not_a_number')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+})
