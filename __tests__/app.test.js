@@ -124,3 +124,34 @@ describe('/api/articles/:article_id', () => {
           });
       });
 })
+
+describe('/api/articles/:article_id/comments', () => {
+    test('GET 200: responds with array of comments for the given article_id with all correct properties', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            expect(comments.length).toBe(11)
+            comments.forEach((comment => {
+                const {comment_id, votes, created_at, author, body, article_id} = comment
+                expect(typeof comment_id).toBe('number')
+                expect(typeof votes).toBe('number')
+                expect(typeof created_at).toBe('string')
+                expect(typeof author).toBe('string')
+                expect(typeof body).toBe('string')
+                expect(typeof article_id).toBe('number')
+            }))
+        })
+    })
+    test('Get 200: responds with comments array ordered in date descending by default', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            console.log(comments)
+            expect(comments).toBeSortedBy('created_at', { descending: true })
+        })
+    })
+})
