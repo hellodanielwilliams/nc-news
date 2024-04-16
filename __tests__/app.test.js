@@ -224,8 +224,15 @@ describe('/api/articles/:article_id/comments', () => {
             expect(body.msg).toBe('Bad request')
         })
     })
-
-    // 400 article_id invalid
-    
+    test('POST 400: responds with a bad request error if article_id is not valid', () => {
+        const testComment = { username: 'lurker', body: 'an example comment body'}
+        return request(app)
+            .post('/api/articles/not-a-number/comments')
+            .send(testComment)
+            .expect(400)
+            .then(({ body: { msg } }) => {
+            expect(msg).toBe('Bad request')
+        })
+    }) 
 })
 
