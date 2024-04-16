@@ -144,8 +144,16 @@ describe('/api/articles/:article_id', () => {
             expect(body.msg).toBe('Bad request')
         })
     })
-    // 400 bad req for bad obj
-    // 404 for non-existent article
+    test('PATCH 404: responds with not found error if article_id is valid but nonexistent in db', () => {
+        const testPatch = { inc_votes : 1 } 
+        return request(app)
+        .patch('/api/articles/9999')
+        .send(testPatch)
+        .expect(404)
+        .then(({ body })  => {
+            expect(body.msg).toBe('Article not found')
+        })
+    })
 })
 
 describe('/api/articles/:article_id/comments', () => {

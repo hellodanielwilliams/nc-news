@@ -1,4 +1,4 @@
-const { selectArticleById, selectArticles, updateVotesByArticleId } = require("../models/articles.models")
+const { selectArticleById, selectArticles, updateVotesByArticleId, checkArticleExists } = require("../models/articles.models")
 
 exports.getArticles = (req, res, next) => {
     return selectArticles().then((articles) => {
@@ -18,8 +18,8 @@ exports.getArticleById = (req, res, next) => {
 exports.patchVotesByArticleId = (req, res, next) => {
     const { article_id } = req.params
     const body = req.body
-    return updateVotesByArticleId(article_id, body)
-    .then((article) => {
+    return Promise.all([updateVotesByArticleId(article_id, body), checkArticleExists(article_id)])
+    .then(([ article ]) => {
         res.status(200).send({ article })
     })
     .catch(next)
