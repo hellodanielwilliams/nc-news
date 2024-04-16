@@ -168,4 +168,26 @@ describe('/api/articles/:article_id/comments', () => {
             expect(comments).toHaveLength(0)
         })
     })
+    test('POST 201: responds with comment object that has been inserted into comments table', () => {
+        const testComment = { username: 'lurker', body: 'an example comment body'}
+        return request(app)
+        .post('/api/articles/2/comments')
+        .send(testComment)
+        .expect(201)
+        .then(({ body : { comment } }) => {
+            const { comment_id, author, body, article_id, votes, created_at }  = comment
+            expect(comment_id).toBe(19)
+            expect(article_id).toBe(2)
+            expect(author).toBe('lurker')
+            expect(body).toBe('an example comment body')
+            expect(votes).toBe(0)
+            expect(typeof created_at).toBe('string')        
+        })
+    })
+    // 400 bad request for malformed object
+    // 404 article not found
+    // 404 username not found (?)
+    // 400 article_id invalid
+    
 })
+
