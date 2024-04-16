@@ -30,8 +30,7 @@
     "description": "serves the article with the article_id specified in endpoint",
     "queries": [],
     "exampleResponse": {
-      "article": [
-        {
+      "article": {
           "article_id": 1,
           "title": "Living in the shadow of a great man",
           "author": "butter_bridge",
@@ -40,8 +39,7 @@
           "created_at": "2020-07-09 21:11:00",
           "votes": 100,
           "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
-        }
-      ]
+      }
     }
   },
   "GET /api/articles/:article_id/comments": {
