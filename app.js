@@ -2,7 +2,7 @@ const express = require('express')
 const endpoints = require('./endpoints.json')
 const { getTopics } = require('./controllers/topics.controllers')
 const { getArticleById, getArticles, patchVotesByArticleId } = require('./controllers/articles.controllers')
-const { getCommentsByArticleId, postCommentByArticleId } = require('./controllers/comments.controllers')
+const { getCommentsByArticleId, postCommentByArticleId, deleteCommentByCommentId } = require('./controllers/comments.controllers')
 
 const app = express()
 
@@ -23,6 +23,8 @@ app.patch('/api/articles/:article_id', patchVotesByArticleId)
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
 
 app.post('/api/articles/:article_id/comments', postCommentByArticleId)
+
+app.delete('/api/comments/:comment_id', deleteCommentByCommentId)
 
 
 // respond with 404 for any undefined endpoints:
