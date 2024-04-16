@@ -167,5 +167,13 @@ describe('/api/articles/:article_id/comments', () => {
             .then(({ body: { msg } }) => {
             expect(msg).toBe('Bad request')
         })
-    })  
+    })
+    test('GET 200: responds with an empty array if the article_id exists but has no comments', () => {
+        return request(app)
+        .get('/api/articles/2/comments')
+        .expect(200)
+        .then(({ body: { comments } }) => {
+            expect(comments).toHaveLength(0)
+        })
+    })
 })
