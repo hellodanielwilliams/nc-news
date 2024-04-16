@@ -129,8 +129,7 @@ describe('/api/articles/:article_id/comments', () => {
         return request(app)
         .get('/api/articles/1/comments')
         .expect(200)
-        .then(({ body }) => {
-            const { comments } = body
+        .then(({ body: { comments } }) => {
             expect(comments.length).toBe(11)
             comments.forEach((comment => {
                 const {comment_id, votes, created_at, author, body, article_id} = comment
@@ -147,8 +146,7 @@ describe('/api/articles/:article_id/comments', () => {
         return request(app)
         .get('/api/articles/1/comments')
         .expect(200)
-        .then(({ body }) => {
-            const { comments } = body
+        .then(({ body: { comments } }) => {
             expect(comments).toBeSortedBy('created_at', { descending: true })
         })
     })
