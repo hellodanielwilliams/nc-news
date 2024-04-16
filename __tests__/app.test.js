@@ -52,7 +52,6 @@ describe('/api/articles', () => {
         .get('/api/articles')
         .expect(200)
         .then(({ body }) => {
-            console.log(body, '<<< body in test')
             const { articles } = body
             expect(articles.length).toBe(13)
             articles.forEach((article) => {
@@ -150,8 +149,15 @@ describe('/api/articles/:article_id/comments', () => {
         .expect(200)
         .then(({ body }) => {
             const { comments } = body
-            console.log(comments)
             expect(comments).toBeSortedBy('created_at', { descending: true })
         })
+    })
+    test('GET 404: responds with a not found error if article_id is valid but does not exist in db', () => {
+        return request(app)
+        .get('/api/articles/9999/comments')
+        .expect(404)
+        .then(({ body: { msg } }) => {
+            expect(msg).toBe('Article not found');
+        });
     })
 })
