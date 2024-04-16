@@ -145,13 +145,23 @@ describe('/api/articles/:article_id', () => {
                 expect(article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
             })
         })
-        test('PATCH 400: responds with a bad request error if sent a malformed votes object', () => {
+        test('PATCH 400: responds with a bad request error if sent a votes object without inc_votes property', () => {
             const testPatch = { not_valid : 1 } 
             return request(app)
             .patch('/api/articles/1')
             .send(testPatch)
             .expect(400)
             .then(({ body}) => {
+                expect(body.msg).toBe('Bad request')
+            })
+        })
+        test('PATCH 400: responds with a bad request if inc_votes value is not a number', () => {
+            const testPatch = { inc_votes : 'not a number' } 
+            return request(app)
+            .patch('/api/articles/1')
+            .send(testPatch)
+            .expect(400)
+            .then(({ body })  => {
                 expect(body.msg).toBe('Bad request')
             })
         })
