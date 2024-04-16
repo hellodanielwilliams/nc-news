@@ -154,6 +154,16 @@ describe('/api/articles/:article_id', () => {
             expect(body.msg).toBe('Article not found')
         })
     })
+    test('PATCH 400: responds with bad request error if article_id is invalid', () => {
+        const testPatch = { inc_votes : 1 } 
+        return request(app)
+        .patch('/api/articles/not_a_number')
+        .send(testPatch)
+        .expect(400)
+        .then(({ body })  => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
 })
 
 describe('/api/articles/:article_id/comments', () => {
