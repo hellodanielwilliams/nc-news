@@ -99,6 +99,14 @@ describe('/api/articles', () => {
                 })
             })
         })
+        test('GET 404: responds with a not found error if topic does not exist in db', () => {
+            return request(app)
+            .get('/api/articles?topic=nonexistent_topic')
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe('Topic not found')
+            })
+        })
     })
 })
 
