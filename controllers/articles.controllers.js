@@ -1,7 +1,8 @@
 const { selectArticleById, selectArticles, updateVotesByArticleId, checkArticleExists } = require("../models/articles.models")
 
 exports.getArticles = (req, res, next) => {
-    return selectArticles().then((articles) => {
+    const { topic } = req.query
+    return selectArticles(topic).then((articles) => {
         res.status(200).send({ articles })
     })
     .catch(next)

@@ -1,27 +1,38 @@
 const db = require('../db/connection')
 
-exports.selectArticles = () => {
-    return db.query(`
-    SELECT  a.author,
-            a.title,
-            a.article_id,
-            a.created_at,
-            a.votes,
-            a.article_img_url,
-            a.topic,
-            COUNT(c.comment_id) AS comment_count
-    FROM articles a 
-    LEFT JOIN comments c
-    ON a.article_id = c.article_id
-    GROUP BY a.author,
-            a.title,
-            a.article_id,
-            a.created_at,
-            a.votes,
-            a.article_img_url,
-            a.topic
-    ORDER BY a.created_at DESC
-    ;`)
+exports.selectArticles = (topic) => {
+    let sqlQueryString = `
+        SELECT  a.author,
+        a.title,
+        a.article_id,
+        a.created_at,
+        a.votes,
+        a.article_img_url,
+        a.topic,
+        COUNT(c.comment_id) AS comment_count
+        FROM articles a 
+        LEFT JOIN comments c
+        ON a.article_id = c.article_id 
+    `
+    const queryValues = []
+
+    if (topic){
+        sqlQueryString += `WHERE a.topic = $1 `
+        queryValues.push(topic)
+    }
+
+    sqlQueryString += `
+        GROUP BY a.author,
+        a.title,
+        a.article_id,
+        a.created_at,
+        a.votes,
+        a.article_img_url,
+        a.topic
+        ORDER BY a.created_at DESC
+    ;`
+
+    return db.query(sqlQueryString, queryValues)
     .then(({ rows }) => {
         rows.forEach((article) => article.comment_count = parseInt(article.comment_count))
         return rows

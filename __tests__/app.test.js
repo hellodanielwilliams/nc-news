@@ -88,6 +88,17 @@ describe('/api/articles', () => {
                 expect(articles).toBeSortedBy('created_at', {descending: true})
             })
         })
+        test('GET 200: responds with array of articles filtered to only include those with the topic specified in query', () => {
+            return request(app)
+            .get('/api/articles?topic=cats')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toHaveLength(1)
+                articles.forEach((article) => {
+                    expect(article.topic).toBe('cats')
+                })
+            })
+        })
     })
 })
 
