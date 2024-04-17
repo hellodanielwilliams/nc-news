@@ -88,6 +88,33 @@ describe('/api/articles', () => {
                 expect(articles).toBeSortedBy('created_at', {descending: true})
             })
         })
+        test('GET 200: responds with array of articles filtered to only include those with the topic specified in query', () => {
+            return request(app)
+            .get('/api/articles?topic=cats')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toHaveLength(1)
+                articles.forEach((article) => {
+                    expect(article.topic).toBe('cats')
+                })
+            })
+        })
+        test('GET 404: responds with a not found error if topic does not exist in db', () => {
+            return request(app)
+            .get('/api/articles?topic=nonexistent_topic')
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe('Topic not found')
+            })
+        })
+        test('GET 200: respons with an empty array if topic exists but has no associated articles', () => {
+            return request(app)
+            .get('/api/articles?topic=paper')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toHaveLength(0)
+            })
+        })
     })
 })
 
