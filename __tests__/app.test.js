@@ -72,7 +72,7 @@ describe('/api/articles', () => {
                 })
             })
         })
-        test('GET 200: responds with correct comment_count from comments table via JOIN on article_id, parsed into a number', () => {
+        test('GET 200: responds with correct comment_count from comments table via JOIN on article_id, cast as INT in psql', () => {
             return request(app)
             .get('/api/articles')
             .expect(200)
