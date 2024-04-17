@@ -34,9 +34,6 @@ exports.selectArticles = (topic) => {
 
     return db.query(sqlQueryString, queryValues)
     .then(({ rows }) => {
-        if (rows.length === 0){
-            return Promise.reject({ status: 404, msg: "Topic not found" })
-        }
         rows.forEach((article) => article.comment_count = parseInt(article.comment_count))
         return rows
     })

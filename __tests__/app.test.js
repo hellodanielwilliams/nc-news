@@ -107,6 +107,14 @@ describe('/api/articles', () => {
                 expect(body.msg).toBe('Topic not found')
             })
         })
+        test('GET 200: respons with an empty array if topic exists but has no associated articles', () => {
+            return request(app)
+            .get('/api/articles?topic=paper')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toHaveLength(0)
+            })
+        })
     })
 })
 
