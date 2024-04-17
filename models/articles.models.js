@@ -9,7 +9,7 @@ exports.selectArticles = (topic) => {
         a.votes,
         a.article_img_url,
         a.topic,
-        COUNT(c.comment_id) AS comment_count
+        COUNT(c.comment_id) :: INT AS comment_count
         FROM articles a 
         LEFT JOIN comments c
         ON a.article_id = c.article_id 
@@ -34,7 +34,6 @@ exports.selectArticles = (topic) => {
 
     return db.query(sqlQueryString, queryValues)
     .then(({ rows }) => {
-        rows.forEach((article) => article.comment_count = parseInt(article.comment_count))
         return rows
     })
 }
