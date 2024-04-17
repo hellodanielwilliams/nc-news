@@ -152,6 +152,14 @@ describe('/api/articles/:article_id', () => {
                 expect(body.msg).toBe('Bad request')
             })
         })
+        test('GET 200: responds with article including accurate comment_count from comments table via JOIN on article_id', () => {
+            return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+            .then(({ body : { article: { comment_count } } })=> {
+                expect(comment_count).toBe(11)
+           }) 
+        })
     })
     describe('PATCH TESTS', () => {
         test('PATCH 200: responds with correctly updated votes in article object', () => {
