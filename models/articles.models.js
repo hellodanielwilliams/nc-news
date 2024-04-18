@@ -1,6 +1,11 @@
 const db = require('../db/connection')
+const { commentData } = require('../db/data/test-data')
 
 exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc') => {
+    if(sort_by !== 'comment_count'){
+        sort_by = `a.${sort_by}`
+    }
+        
     let sqlQueryString = `
         SELECT  a.author,
         a.title,
@@ -29,7 +34,7 @@ exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc') => {
         a.votes,
         a.article_img_url,
         a.topic
-        ORDER BY a.${sort_by} ${order}
+        ORDER BY ${sort_by} ${order}
     ;`
 
     return db.query(sqlQueryString, queryValues)
