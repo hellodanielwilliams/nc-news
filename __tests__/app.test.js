@@ -430,3 +430,29 @@ describe('/api/users', () => {
         })
     })
 })
+describe('/api/users/:username', () => {
+    describe('GET TESTS', () => {
+        test('GET 200: responds with a user object with username, name and avatar_url properties when username exists in db', () => {
+            return request(app)
+            .get('/api/users/lurker')
+            .expect(200)
+            .then(({ body: { user }}) => {
+                const testUser = { 
+                    username: 'lurker', 
+                    name: 'do_nothing', 
+                    avatar_url:
+                      'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png'
+                }
+                expect(user).toMatchObject(testUser)
+            })
+        })
+        test('GET 404: responds with a not found error if the username does not exist in db', () => {
+            return request(app)
+            .get('/api/users/not-a-real-username')
+            .expect(404)
+            .then(({ body: { msg }}) => {
+                expect(msg).toBe('Username not found')
+            })
+        } )
+    })
+})
