@@ -2,8 +2,8 @@ const { selectArticleById, selectArticles, updateVotesByArticleId, checkArticleE
 const { checkTopicExists } = require("../models/topics.models")
 
 exports.getArticles = (req, res, next) => {
-    const { topic } = req.query
-    return Promise.all([selectArticles(topic), checkTopicExists(topic)])
+    const { topic, order } = req.query
+    return Promise.all([selectArticles(topic, order), checkTopicExists(topic)])
     .then(([ articles ]) => res.status(200).send({ articles }))
     .catch(next)
 }

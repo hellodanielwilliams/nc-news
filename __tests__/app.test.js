@@ -107,12 +107,20 @@ describe('/api/articles', () => {
                 expect(body.msg).toBe('Topic not found')
             })
         })
-        test('GET 200: respons with an empty array if topic exists but has no associated articles', () => {
+        test('GET 200: responds with an empty array if topic exists but has no associated articles', () => {
             return request(app)
             .get('/api/articles?topic=paper')
             .expect(200)
             .then(({ body: { articles } }) => {
                 expect(articles).toHaveLength(0)
+            })
+        })
+        test('GET 200: responds with articles sorted in ascending date order if specified in order query', () => {
+            return request(app)
+            .get('/api/articles?order=asc')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy('created_at', {ascending: true})
             })
         })
     })
