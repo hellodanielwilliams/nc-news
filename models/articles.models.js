@@ -2,10 +2,15 @@ const db = require('../db/connection')
 const { commentData } = require('../db/data/test-data')
 
 exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc') => {
+    const validOrders = ['asc', 'desc']
+    if(!validOrders.includes(order)){
+        return Promise.reject({ status: 400, msg: 'Bad request'})
+    }
+    
     if(sort_by !== 'comment_count'){
         sort_by = `a.${sort_by}`
     }
-        
+
     let sqlQueryString = `
         SELECT  a.author,
         a.title,

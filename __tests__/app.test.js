@@ -139,7 +139,14 @@ describe('/api/articles', () => {
                 expect(articles).toBeSortedBy('comment_count', {descending: true})
             })
         })
-       
+       test('GET 400: responds with a bad request error if sort query is neither asc nor desc', () => {
+            return request(app)
+            .get('/api/articles?order=invalid_order')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+                expect(msg).toBe('Bad request')
+            })
+       })
     })
 })
 
