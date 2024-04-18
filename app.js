@@ -1,5 +1,6 @@
 const express = require('express')
-const endpoints = require('./endpoints.json')
+//const endpoints = require('./endpoints.json')
+const apiRouter = require('./routes/api-router')
 const { getTopics } = require('./controllers/topics.controllers')
 const { getArticleById, getArticles, patchVotesByArticleId } = require('./controllers/articles.controllers')
 const { getCommentsByArticleId, postCommentByArticleId, deleteCommentByCommentId } = require('./controllers/comments.controllers')
@@ -11,7 +12,9 @@ app.use(express.json())
 
 // endpoints:
 
-app.get('/api', (req, res, next) => res.status(200).send(endpoints))
+app.use('/api', apiRouter)
+
+//app.get('/api', (req, res, next) => res.status(200).send(endpoints))
 
 app.get('/api/topics', getTopics)
 
