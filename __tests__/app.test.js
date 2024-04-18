@@ -123,6 +123,14 @@ describe('/api/articles', () => {
                 expect(articles).toBeSortedBy('created_at', {ascending: true})
             })
         })
+        test('GET 200: responds with articles sorted by a column specified in sort_by query', () => {
+            return request(app)
+            .get('/api/articles?sort_by=author&order=asc')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy('author', {ascending: true})
+            })
+        })
     })
 })
 

@@ -1,6 +1,6 @@
 const db = require('../db/connection')
 
-exports.selectArticles = (topic, order = 'desc') => {
+exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc') => {
     let sqlQueryString = `
         SELECT  a.author,
         a.title,
@@ -29,7 +29,7 @@ exports.selectArticles = (topic, order = 'desc') => {
         a.votes,
         a.article_img_url,
         a.topic
-        ORDER BY a.created_at ${order}
+        ORDER BY a.${sort_by} ${order}
     ;`
 
     return db.query(sqlQueryString, queryValues)
