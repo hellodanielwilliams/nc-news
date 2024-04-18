@@ -3,10 +3,13 @@ const { commentData } = require('../db/data/test-data')
 
 exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc') => {
     const validOrders = ['asc', 'desc']
+    const validSortBys = ['author', 'title', 'article_id', 'created_at', 'article_img_url', 'topic', 'comment_count']
     if(!validOrders.includes(order)){
         return Promise.reject({ status: 400, msg: 'Bad request'})
     }
-    
+    if(!validSortBys.includes(sort_by)){
+        return Promise.reject({ status: 404, msg: 'Column not found'})
+    }
     if(sort_by !== 'comment_count'){
         sort_by = `a.${sort_by}`
     }

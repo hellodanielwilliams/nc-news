@@ -147,6 +147,14 @@ describe('/api/articles', () => {
                 expect(msg).toBe('Bad request')
             })
        })
+       test('GET 404: responds with a not found error if specified sort_by column is invalid', () => {
+            return request(app)
+            .get('/api/articles?sort_by=invalid_column')
+            .expect(404)
+            .then(({ body: { msg } }) => {
+                expect(msg).toBe('Column not found')
+            })
+        })
     })
 })
 
