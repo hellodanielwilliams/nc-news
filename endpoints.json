@@ -10,8 +10,8 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles. if sent a query of topic, filters the served array to only include articles with that topic",
-    "queries": ["topic"],
+    "description": "serves an array of all articles. topic query filters served array by specified topic. sort_by query can take any of the column names seen below in the example response - defaults to created_at. order query can take asc or desc - defaults to desc ",
+    "queries": ["topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
