@@ -107,12 +107,52 @@ describe('/api/articles', () => {
                 expect(body.msg).toBe('Topic not found')
             })
         })
-        test('GET 200: respons with an empty array if topic exists but has no associated articles', () => {
+        test('GET 200: responds with an empty array if topic exists but has no associated articles', () => {
             return request(app)
             .get('/api/articles?topic=paper')
             .expect(200)
             .then(({ body: { articles } }) => {
                 expect(articles).toHaveLength(0)
+            })
+        })
+        test('GET 200: responds with articles sorted in ascending date order if specified in order query', () => {
+            return request(app)
+            .get('/api/articles?order=asc')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy('created_at', {ascending: true})
+            })
+        })
+        test('GET 200: responds with articles sorted by a column from articles table specified in sort_by query', () => {
+            return request(app)
+            .get('/api/articles?sort_by=author&order=asc')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy('author', {ascending: true})
+            })
+        })
+        test('GET 200: responds with articles sorted by comment_count column from the JOIN if specified', () => {
+            return request(app)
+            .get('/api/articles?sort_by=comment_count')
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy('comment_count', {descending: true})
+            })
+        })
+       test('GET 400: responds with a bad request error if sort query is neither asc nor desc', () => {
+            return request(app)
+            .get('/api/articles?order=invalid_order')
+            .expect(400)
+            .then(({ body: { msg } }) => {
+                expect(msg).toBe('Bad request')
+            })
+       })
+       test('GET 404: responds with a not found error if specified sort_by column is invalid', () => {
+            return request(app)
+            .get('/api/articles?sort_by=invalid_column')
+            .expect(404)
+            .then(({ body: { msg } }) => {
+                expect(msg).toBe('Column not found')
             })
         })
     })
