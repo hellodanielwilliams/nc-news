@@ -1,15 +1,11 @@
 const express = require('express')
 const apiRouter = require('./routes/api-router')
-const { getUsers } = require('./controllers/users.controllers')
 
 const app = express()
 
 app.use(express.json())
 
 app.use('/api', apiRouter)
-
-app.get('/api/users', getUsers)
-
 
 // respond with 404 for any undefined endpoints:
 app.use((req, res, next) => {
