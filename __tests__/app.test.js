@@ -446,5 +446,13 @@ describe('/api/users/:username', () => {
                 expect(user).toMatchObject(testUser)
             })
         })
+        test('GET 404: responds with a not found error if the username does not exist in db', () => {
+            return request(app)
+            .get('/api/users/not-a-real-username')
+            .expect(404)
+            .then(({ body: { msg }}) => {
+                expect(msg).toBe('Username not found')
+            })
+        } )
     })
 })
