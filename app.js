@@ -1,34 +1,11 @@
 const express = require('express')
-const endpoints = require('./endpoints.json')
-const { getTopics } = require('./controllers/topics.controllers')
-const { getArticleById, getArticles, patchVotesByArticleId } = require('./controllers/articles.controllers')
-const { getCommentsByArticleId, postCommentByArticleId, deleteCommentByCommentId } = require('./controllers/comments.controllers')
-const { getUsers } = require('./controllers/users.controllers')
+const apiRouter = require('./routes/api-router')
 
 const app = express()
 
 app.use(express.json())
 
-// endpoints:
-
-app.get('/api', (req, res, next) => res.status(200).send(endpoints))
-
-app.get('/api/topics', getTopics)
-
-app.get('/api/articles', getArticles)
-
-app.get('/api/articles/:article_id', getArticleById)
-
-app.patch('/api/articles/:article_id', patchVotesByArticleId)
-
-app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
-
-app.post('/api/articles/:article_id/comments', postCommentByArticleId)
-
-app.delete('/api/comments/:comment_id', deleteCommentByCommentId)
-
-app.get('/api/users', getUsers)
-
+app.use('/api', apiRouter)
 
 // respond with 404 for any undefined endpoints:
 app.use((req, res, next) => {
