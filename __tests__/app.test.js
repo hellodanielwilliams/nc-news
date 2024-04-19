@@ -182,6 +182,14 @@ describe('/api/articles', () => {
                     expect(articles).toHaveLength(5)
                 }) 
             })
+            test('GET 200: responds with articles array offset by p query, with single page length specified by limit (default 10)', () => {
+                return request(app)
+                .get('/api/articles?p=2')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toHaveLength(3)
+                }) 
+            })
         })
     })
     describe('POST TESTS:', () => {

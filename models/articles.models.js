@@ -1,7 +1,7 @@
 const db = require('../db/connection')
 const { commentData } = require('../db/data/test-data')
 
-exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit = 10) => {
+exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit = 10, p = 1) => {
     const validOrders = ['asc', 'desc']
     const validSortBys = ['author', 'title', 'article_id', 'created_at', 'article_img_url', 'topic', 'comment_count']
     if(!validOrders.includes(order)){
@@ -49,9 +49,9 @@ exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit =
         a.article_img_url,
         a.topic
         ORDER BY ${sort_by} ${order}
-        LIMIT ${limit}
+        LIMIT ${limit} OFFSET ${(p-1) * limit}
     ;`
-
+    
     return db.query(getTotalCountQuery, queryValues)
     .then(({ rows: [ { total_count } ]}) => {
         return db.query(sqlQueryString, queryValues)
