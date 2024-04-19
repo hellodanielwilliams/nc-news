@@ -101,12 +101,21 @@ exports.updateVotesByArticleId = (article_id, { inc_votes } ) => {
 }
 
 exports.insertArticle = ({ author, title, body, topic, article_img_url }) => {
+    const columns = ['author', 'title', 'body', 'topic']
+    const values = [author, title, body, topic]
+    let placeholders = '$1, $2, $3, $4'
+
+    if (article_img_url !== undefined) {
+        columns.push('article_img_url')
+        values.push(article_img_url)
+        placeholders += ', $5'
+    }
     return db.query(`
         INSERT INTO articles
-        (author, title, body, topic, article_img_url)
-        VALUES ($1, $2, $3, $4, $5)
+        (${columns.join(', ')})
+        VALUES (${placeholders})
         RETURNING article_id, body
-    ;`, [author, title, body, topic, article_img_url])
+    ;`, values)
     .then(({ rows }) => {
         return rows[0]
     })

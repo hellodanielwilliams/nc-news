@@ -183,6 +183,21 @@ describe('/api/articles', () => {
                 }))
            })
         })
+        test('POST 201: responds with article with default article_img_url if not sent in request body', () => {
+            const testArticle = {
+                author: 'lurker',
+                title: 'Article Title',
+                body: 'Article body text...',
+                topic: 'cats',
+            }
+           return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(201)
+           .then(({ body: { article: { article_img_url } }}) => {
+                expect(article_img_url).toBe('https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700')
+           })
+        })
     })
 })
 
