@@ -41,4 +41,5 @@ exports.patchVotesByCommentId = (req, res, next) => {
     .then((comment) => {
         res.status(200).send({ comment })
     })
+    .catch(next)
 }
