@@ -427,8 +427,18 @@ describe('/api/comments/:comment_id', () => {
                 expect(comment).toMatchObject(expected)
             })
         })
-        test('PATCH 400: responds with a bad request if inc_votes value is not a number', () => {
+        test('PATCH 400: responds with a bad request error if inc_votes value is not a number', () => {
             const testPatch = { inc_votes : 'not a number' } 
+            return request(app)
+            .patch('/api/comments/1')
+            .send(testPatch)
+            .expect(400)
+            .then(({ body: { msg } })  => {
+                expect(msg).toBe('Bad request')
+            })
+        })
+        test('PATCH 400: responds with a bad request error if inc_votes property not present', () => {
+            const testPatch = { invalid_key : 1 } 
             return request(app)
             .patch('/api/comments/1')
             .send(testPatch)
