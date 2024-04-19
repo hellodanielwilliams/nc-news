@@ -114,7 +114,7 @@ exports.insertArticle = ({ author, title, body, topic, article_img_url }) => {
         INSERT INTO articles
         (${columns.join(', ')})
         VALUES (${placeholders})
-        RETURNING article_id, body
+        RETURNING article_id
     ;`, values)
     .then(({ rows }) => {
         return rows[0]

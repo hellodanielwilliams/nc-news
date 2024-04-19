@@ -28,9 +28,8 @@ exports.patchVotesByArticleId = (req, res, next) => {
 
 exports.postArticle = (req, res, next) => {
     const body = req.body
-    return insertArticle(body).then(({ article_id, body }) => {
+    return insertArticle(body).then(({ article_id }) => {
         return selectArticleById(article_id).then((article) => {
-            article.body = body
             res.status(201).send({ article })
         })
     })
