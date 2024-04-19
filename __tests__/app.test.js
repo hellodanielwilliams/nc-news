@@ -156,6 +156,34 @@ describe('/api/articles', () => {
             })
         })
     })
+    describe('POST TESTS:', () => {
+        test('POST 201: responds with posted article with all properties coming back from a GET plus the body property, with article_img_url included in request body', () => {
+            const testArticle = {
+                author: 'lurker',
+                title: 'Article Title',
+                body: 'Article body text...',
+                topic: 'cats',
+                article_img_url: 'https://picsum.photos/seed/picsum/1280/720'
+            }
+           return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(201)
+           .then(({ body: { article }}) => {
+                expect(article).toEqual(expect.objectContaining({
+                    author: 'lurker',
+                    title: 'Article Title',
+                    body: 'Article body text...',
+                    topic: 'cats',
+                    article_img_url: 'https://picsum.photos/seed/picsum/1280/720',
+                    article_id: 14,
+                    votes: 0,
+                    comment_count: 0,
+                    created_at: expect.any(String)
+                }))
+           })
+        })
+    })
 })
 
 describe('/api/articles/:article_id', () => {

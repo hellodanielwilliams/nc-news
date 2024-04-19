@@ -100,6 +100,18 @@ exports.updateVotesByArticleId = (article_id, { inc_votes } ) => {
     })
 }
 
+exports.insertArticle = ({ author, title, body, topic, article_img_url }) => {
+    return db.query(`
+        INSERT INTO articles
+        (author, title, body, topic, article_img_url)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING article_id, body
+    ;`, [author, title, body, topic, article_img_url])
+    .then(({ rows }) => {
+        return rows[0]
+    })
+}
+
 exports.checkArticleExists = (article_id) => {
     return db.query(`
         SELECT * FROM articles

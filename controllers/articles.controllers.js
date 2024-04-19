@@ -1,4 +1,4 @@
-const { selectArticleById, selectArticles, updateVotesByArticleId, checkArticleExists } = require("../models/articles.models")
+const { selectArticleById, selectArticles, updateVotesByArticleId, checkArticleExists, insertArticle } = require("../models/articles.models")
 const { checkTopicExists } = require("../models/topics.models")
 
 exports.getArticles = (req, res, next) => {
@@ -24,4 +24,14 @@ exports.patchVotesByArticleId = (req, res, next) => {
         res.status(200).send({ article })
     })
     .catch(next)
+}
+
+exports.postArticle = (req, res, next) => {
+    const body = req.body
+    return insertArticle(body).then(({ article_id, body }) => {
+        return selectArticleById(article_id).then((article) => {
+            article.body = body
+            res.status(201).send({ article })
+        })
+    })
 }
