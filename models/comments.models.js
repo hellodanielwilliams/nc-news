@@ -43,6 +43,9 @@ exports.updateVotesByCommentId = (comment_id, { inc_votes }) => {
         RETURNING *
     ;`, [inc_votes, comment_id])
     .then(({ rows }) => {
+        if (rows.length === 0){
+            return Promise.reject({ status: 404, msg: "Comment not found" })
+        }
         return rows[0]
     })
 }

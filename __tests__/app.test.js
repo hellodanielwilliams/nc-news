@@ -447,6 +447,16 @@ describe('/api/comments/:comment_id', () => {
                 expect(msg).toBe('Bad request')
             })
         })
+        test('PATCH 404: responds with a not found error if comment_id does not exist in db', () => {
+            const testPatch = { inc_votes : 1 } 
+            return request(app)
+            .patch('/api/comments/9999')
+            .send(testPatch)
+            .expect(404)
+            .then(({ body: { msg } })  => {
+                expect(msg).toBe('Comment not found')
+            })
+        })
     })
 })
 
