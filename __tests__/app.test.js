@@ -58,7 +58,7 @@ describe('/api/articles', () => {
             .get('/api/articles')
             .expect(200)
             .then(({ body: { articles } }) => {
-                expect(articles).toHaveLength(13)
+                expect(articles.length).toBeGreaterThan(0)
                 articles.forEach((article) => {
                     const { author, title, article_id, topic, created_at, votes, article_img_url } = article
                     expect(typeof author).toBe('string')
@@ -153,6 +153,17 @@ describe('/api/articles', () => {
             .expect(404)
             .then(({ body: { msg } }) => {
                 expect(msg).toBe('Column not found')
+            })
+        })
+        describe('PAGINATION TESTS', () => {
+            test('GET 200: responds with aticles array limited to length of 10 by default, served body has a total_count property equal to number of articles in db', () => {
+                return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body: { articles, total_count } }) => {
+                    expect(articles).toHaveLength(10)
+                    expect(total_count).toBe(13)
+                })
             })
         })
     })
