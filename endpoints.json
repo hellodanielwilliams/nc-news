@@ -26,6 +26,29 @@
       ]
     }
   },
+  "POST /api/articles": {
+    "description": "posts a new article, image assigned a default in db if not provided",
+    "queries": [],
+    "exampleRequest": { 
+      "author": "lurker",
+      "title": "Article Title",
+      "body": "Article body text...",
+      "topic": "cats"
+    },
+    "exampleResponse": {
+      "article": {
+          "author": "lurker",
+          "title": "Article Title",
+          "article_id": 14,
+          "created_at": "2024-04-19T13:35:09.209Z",
+          "body": "Article body text...",
+          "votes": 0,
+          "article_img_url": "https://picsum.photos/seed/picsum/1280/720",
+          "topic": "cats",
+          "comment_count": 0
+      }
+    }
+  },
   "GET /api/articles/:article_id": {
     "description": "serves the article with the article_id specified in endpoint",
     "queries": [],
