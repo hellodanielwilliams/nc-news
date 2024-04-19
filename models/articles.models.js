@@ -5,7 +5,7 @@ exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit =
     const validOrders = ['asc', 'desc']
     const validSortBys = ['author', 'title', 'article_id', 'created_at', 'article_img_url', 'topic', 'comment_count']
     
-    if(!validOrders.includes(order) || isNaN(parseInt(limit))){
+    if(!validOrders.includes(order) || isNaN(parseInt(limit)) || isNaN(parseInt(p)) ){
         return Promise.reject({ status: 400, msg: 'Bad request'})
     }
     if(!validSortBys.includes(sort_by)){

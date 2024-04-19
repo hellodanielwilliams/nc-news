@@ -198,6 +198,14 @@ describe('/api/articles', () => {
                     expect(msg).toBe('Bad request')
                 }) 
             })
+            test('GET 400: responds with a bad request error if p is not a number', ()=>{
+                return request(app)
+                .get('/api/articles?p=not_a_number')
+                .expect(400)
+                .then(({ body: { msg } }) => {
+                    expect(msg).toBe('Bad request')
+                }) 
+            })
         })
     })
     describe('POST TESTS:', () => {
