@@ -10,8 +10,8 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles. topic query filters served array by specified topic. sort_by query can take any of the column names seen below in the example response - defaults to created_at. order query can take asc or desc - defaults to desc ",
-    "queries": ["topic", "sort_by", "order"],
+    "description": "serves an array of all articles and a total_count of articles found by query. topic query filters the served array by specified topic. sort_by query can take any of the column names seen below in the example response - defaults to created_at. order query can take asc or desc - defaults to desc. limit query takes a number and limits the served array to that length - defaults to 10. p query stands for page - articles array will be offset by number of pages, with page length specified by limit - p defaults to 1",
+    "queries": ["topic", "sort_by", "order", "limit", "p"],
     "exampleResponse": {
       "articles": [
         {
@@ -23,7 +23,8 @@
           "votes": 0,
           "comment_count": 6
         }
-      ]
+      ],
+      "total_count": 13
     }
   },
   "POST /api/articles": {
