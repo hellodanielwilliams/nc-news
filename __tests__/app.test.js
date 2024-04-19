@@ -165,6 +165,15 @@ describe('/api/articles', () => {
                     expect(total_count).toBe(13)
                 })
             })
+            test('GET 200: responds with correctly calculated total_count number if filtered by topic query', () => {
+                return request(app)
+                .get('/api/articles?topic=mitch')
+                .expect(200)
+                .then(({ body: { articles, total_count } }) => {
+                    expect(articles).toHaveLength(10)
+                    expect(total_count).toBe(12)
+                })
+            })
         })
     })
     describe('POST TESTS:', () => {

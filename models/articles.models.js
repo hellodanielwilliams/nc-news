@@ -17,7 +17,7 @@ exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit =
         SELECT COUNT(DISTINCT a.article_id):: INT AS total_count
         FROM articles a 
         LEFT JOIN comments c
-        ON a.article_id = c.article_id ;`
+        ON a.article_id = c.article_id `
 
     let sqlQueryString = `
         SELECT  a.author,
@@ -36,6 +36,7 @@ exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit =
 
     if (topic){
         sqlQueryString += `WHERE a.topic = $1 `
+        getTotalCountQuery += `WHERE a.topic = $1 ;`
         queryValues.push(topic)
     }
 
@@ -51,7 +52,7 @@ exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit =
         LIMIT ${limit}
     ;`
 
-    return db.query(getTotalCountQuery)
+    return db.query(getTotalCountQuery, queryValues)
     .then(({ rows: [ { total_count } ]}) => {
         return db.query(sqlQueryString, queryValues)
         .then(({ rows }) => [rows, total_count])
