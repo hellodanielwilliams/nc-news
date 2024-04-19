@@ -208,6 +208,22 @@ describe('/api/articles', () => {
                 expect(msg).toBe('Bad request')
            })
         })
+        test('POST 404: responds with a not found error if author from req body does not exist in db', () => {
+            const testArticle = {
+                author: 'not_real_username',
+                title: 'Article Title',
+                body: 'Article body text...',
+                topic: 'cats',
+            }
+           return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(404)
+           .then(({ body: { msg }}) => {
+                expect(msg).toBe('Author not found')
+           })
+
+        })
     })
 })
 
