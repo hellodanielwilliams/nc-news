@@ -156,6 +156,90 @@ describe('/api/articles', () => {
             })
         })
     })
+    describe('POST TESTS:', () => {
+        test('POST 201: responds with posted article with all properties coming back from a GET plus the body property, with article_img_url included in request body', () => {
+            const testArticle = {
+                author: 'lurker',
+                title: 'Article Title',
+                body: 'Article body text...',
+                topic: 'cats',
+                article_img_url: 'https://picsum.photos/seed/picsum/1280/720'
+            }
+           return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(201)
+           .then(({ body: { article }}) => {
+                expect(article).toEqual(expect.objectContaining({
+                    author: 'lurker',
+                    title: 'Article Title',
+                    body: 'Article body text...',
+                    topic: 'cats',
+                    article_img_url: 'https://picsum.photos/seed/picsum/1280/720',
+                    article_id: 14,
+                    votes: 0,
+                    comment_count: 0,
+                    created_at: expect.any(String)
+                }))
+           })
+        })
+        test('POST 201: responds with article with default article_img_url if not sent in request body', () => {
+            const testArticle = {
+                author: 'lurker',
+                title: 'Article Title',
+                body: 'Article body text...',
+                topic: 'cats',
+            }
+           return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(201)
+           .then(({ body: { article: { article_img_url } }}) => {
+                expect(article_img_url).toBe('https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700')
+           })
+        })
+        test('POST 400: responds with a bad request error if req body is missing properties', () => {
+            const testArticle = { author: 'lurker' }
+            return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(400)
+           .then(({ body: { msg }}) => {
+                expect(msg).toBe('Bad request')
+           })
+        })
+        test('POST 404: responds with a not found error if author from req body does not exist in db', () => {
+            const testArticle = {
+                author: 'not_real_username',
+                title: 'Article Title',
+                body: 'Article body text...',
+                topic: 'cats',
+            }
+           return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(404)
+           .then(({ body: { msg }}) => {
+                expect(msg).toBe('Author not found')
+           })
+        })
+        test('POST 404: responds with a not found error if topic from req body does not exist in db', () => {
+            const testArticle = {
+                author: 'lurker',
+                title: 'Article Title',
+                body: 'Article body text...',
+                topic: 'not_real_topic',
+            }
+           return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(404)
+           .then(({ body: { msg }}) => {
+                expect(msg).toBe('Topic not found')
+           })
+
+        })
+    })
 })
 
 describe('/api/articles/:article_id', () => {
@@ -479,6 +563,7 @@ describe('/api/users', () => {
         })
     })
 })
+
 describe('/api/users/:username', () => {
     describe('GET TESTS', () => {
         test('GET 200: responds with a user object with username, name and avatar_url properties when username exists in db', () => {
