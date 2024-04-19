@@ -198,6 +198,16 @@ describe('/api/articles', () => {
                 expect(article_img_url).toBe('https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700')
            })
         })
+        test('POST 400: responds with a bad request error if req body is missing properties', () => {
+            const testArticle = { author: 'lurker' }
+            return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(400)
+           .then(({ body: { msg }}) => {
+                expect(msg).toBe('Bad request')
+           })
+        })
     })
 })
 
@@ -522,6 +532,7 @@ describe('/api/users', () => {
         })
     })
 })
+
 describe('/api/users/:username', () => {
     describe('GET TESTS', () => {
         test('GET 200: responds with a user object with username, name and avatar_url properties when username exists in db', () => {
