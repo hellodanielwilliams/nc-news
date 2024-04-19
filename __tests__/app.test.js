@@ -174,6 +174,14 @@ describe('/api/articles', () => {
                     expect(total_count).toBe(12)
                 })
             })
+            test('GET 200: responds with articles array length matching limit query if specified', () => {
+                return request(app)
+                .get('/api/articles?limit=5')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toHaveLength(5)
+                }) 
+            })
         })
     })
     describe('POST TESTS:', () => {
