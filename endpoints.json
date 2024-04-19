@@ -98,6 +98,20 @@
     "description": "deletes a comment and serves no body back",
     "queries": []
   },
+  "PATCH /api/comments/:comment_id": {
+    "description": "updates votes on a comment with inc_votes number sent, serves back the comment with correctly updated votes total",
+    "queries": [],
+    "exampleRequest": { "inc_votes" : 1 },
+    "exampleResponse": {
+      "comment": {
+          "comment_id": 1, 
+          "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!", 
+          "votes": 17, 
+          "author": "butter_bridge",
+          "article_id": 9
+      }
+    }
+  },
   "GET /api/users": {
     "description": "serves an array of all users",
     "queries": [],
