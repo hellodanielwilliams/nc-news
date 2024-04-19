@@ -409,6 +409,25 @@ describe('/api/comments/:comment_id', () => {
             })
         })
     })
+    describe('PATCH TESTS', () => {
+        test('PATCH 200: responds with correctly updated votes in comment object', () => {
+            const testPatch = { inc_votes : 1 } 
+            return request(app)
+            .patch('/api/comments/1')
+            .send(testPatch)
+            .expect(200)
+            .then(({ body: { comment }}) => {
+                const expected = { 
+                    comment_id: 1, 
+                    body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!", 
+                    votes: 17, 
+                    author: 'butter_bridge',
+                    article_id: 9, 
+                }
+                expect(comment).toMatchObject(expected)
+            })
+        })
+    })
 })
 
 describe('/api/users', () => {
