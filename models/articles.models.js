@@ -4,15 +4,18 @@ const { commentData } = require('../db/data/test-data')
 exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit = 10, p = 1) => {
     const validOrders = ['asc', 'desc']
     const validSortBys = ['author', 'title', 'article_id', 'created_at', 'article_img_url', 'topic', 'comment_count']
-    if(!validOrders.includes(order)){
+    
+    if(!validOrders.includes(order) || isNaN(parseInt(limit))){
         return Promise.reject({ status: 400, msg: 'Bad request'})
     }
     if(!validSortBys.includes(sort_by)){
         return Promise.reject({ status: 404, msg: 'Column not found'})
     }
+    
     if(sort_by !== 'comment_count'){
         sort_by = `a.${sort_by}`
     }
+    
     let getTotalCountQuery = `
         SELECT COUNT(DISTINCT a.article_id):: INT AS total_count
         FROM articles a 
@@ -51,7 +54,7 @@ exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit =
         ORDER BY ${sort_by} ${order}
         LIMIT ${limit} OFFSET ${(p-1) * limit}
     ;`
-    
+
     return db.query(getTotalCountQuery, queryValues)
     .then(({ rows: [ { total_count } ]}) => {
         return db.query(sqlQueryString, queryValues)
