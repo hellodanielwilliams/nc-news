@@ -10,14 +10,22 @@ exports.handlePsqlErrors = (err, req, res, next) => {
             res.status(400).send({ msg: 'Bad request'})
         }
         if(err.code === '23503') {
-            if(err.constraint === 'articles_author_fkey'){
-                res.status(404).send({ msg: 'Author not found'})
+            let msg
+            switch(err.constraint){
+                case 'articles_author_fkey':
+                    msg = 'Author not found'
+                    break
+                case 'articles_topic_fkey':
+                    msg = 'Topic not found'
+                    break
+                case 'comments_article_id_fkey':
+                    msg = 'Article not found'
+                    break
+                default: 
+                    msg = 'Invalid foreign key'
+                    break
             }
-            if(err.constraint === 'articles_topic_fkey'){
-                res.status(404).send({ msg: 'Topic not found'})
-            }
-            if(err.constraint === 'comments_article_id_fkey')
-                res.status(404).send({ msg: 'Article not found'})
+            res.status(404).send({ msg })
         }
     }
     next(err)
