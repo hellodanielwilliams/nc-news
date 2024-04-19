@@ -409,6 +409,55 @@ describe('/api/comments/:comment_id', () => {
             })
         })
     })
+    describe('PATCH TESTS', () => {
+        test('PATCH 200: responds with correctly updated votes in comment object', () => {
+            const testPatch = { inc_votes : 1 } 
+            return request(app)
+            .patch('/api/comments/1')
+            .send(testPatch)
+            .expect(200)
+            .then(({ body: { comment }}) => {
+                const expected = { 
+                    comment_id: 1, 
+                    body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!", 
+                    votes: 17, 
+                    author: 'butter_bridge',
+                    article_id: 9, 
+                }
+                expect(comment).toMatchObject(expected)
+            })
+        })
+        test('PATCH 400: responds with a bad request error if inc_votes value is not a number', () => {
+            const testPatch = { inc_votes : 'not a number' } 
+            return request(app)
+            .patch('/api/comments/1')
+            .send(testPatch)
+            .expect(400)
+            .then(({ body: { msg } })  => {
+                expect(msg).toBe('Bad request')
+            })
+        })
+        test('PATCH 400: responds with a bad request error if inc_votes property not present', () => {
+            const testPatch = { invalid_key : 1 } 
+            return request(app)
+            .patch('/api/comments/1')
+            .send(testPatch)
+            .expect(400)
+            .then(({ body: { msg } })  => {
+                expect(msg).toBe('Bad request')
+            })
+        })
+        test('PATCH 404: responds with a not found error if comment_id does not exist in db', () => {
+            const testPatch = { inc_votes : 1 } 
+            return request(app)
+            .patch('/api/comments/9999')
+            .send(testPatch)
+            .expect(404)
+            .then(({ body: { msg } })  => {
+                expect(msg).toBe('Comment not found')
+            })
+        })
+    })
 })
 
 describe('/api/users', () => {
