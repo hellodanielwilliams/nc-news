@@ -222,6 +222,21 @@ describe('/api/articles', () => {
            .then(({ body: { msg }}) => {
                 expect(msg).toBe('Author not found')
            })
+        })
+        test('POST 404: responds with a not found error if topic from req body does not exist in db', () => {
+            const testArticle = {
+                author: 'lurker',
+                title: 'Article Title',
+                body: 'Article body text...',
+                topic: 'not_real_topic',
+            }
+           return request(app)
+           .post('/api/articles')
+           .send(testArticle)
+           .expect(404)
+           .then(({ body: { msg }}) => {
+                expect(msg).toBe('Topic not found')
+           })
 
         })
     })

@@ -13,8 +13,11 @@ exports.handlePsqlErrors = (err, req, res, next) => {
             if(err.constraint === 'articles_author_fkey'){
                 res.status(404).send({ msg: 'Author not found'})
             }
+            if(err.constraint === 'articles_topic_fkey'){
+                res.status(404).send({ msg: 'Topic not found'})
+            }
             if(err.constraint === 'comments_article_id_fkey')
-            res.status(404).send({ msg: 'Article not found'})
+                res.status(404).send({ msg: 'Article not found'})
         }
     }
     next(err)
