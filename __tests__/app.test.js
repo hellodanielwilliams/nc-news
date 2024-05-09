@@ -125,10 +125,10 @@ describe('/api/articles', () => {
         })
         test('GET 200: responds with articles sorted by a column from articles table specified in sort_by query', () => {
             return request(app)
-            .get('/api/articles?sort_by=author&order=asc')
+            .get('/api/articles?sort_by=votes&order=asc')
             .expect(200)
             .then(({ body: { articles } }) => {
-                expect(articles).toBeSortedBy('author', {ascending: true})
+                expect(articles).toBeSortedBy('votes', {ascending: true})
             })
         })
         test('GET 200: responds with articles sorted by comment_count column from the JOIN if specified', () => {

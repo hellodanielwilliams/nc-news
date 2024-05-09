@@ -3,7 +3,7 @@ const { commentData } = require('../db/data/test-data')
 
 exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc', limit = 10, p = 1) => {
     const validOrders = ['asc', 'desc']
-    const validSortBys = ['author', 'title', 'article_id', 'created_at', 'article_img_url', 'topic', 'comment_count']
+    const validSortBys = ['author', 'title', 'article_id', 'created_at', 'article_img_url', 'topic', 'comment_count', 'votes']
     
     if(!validOrders.includes(order) || isNaN(parseInt(limit)) || isNaN(parseInt(p)) ){
         return Promise.reject({ status: 400, msg: 'Bad request'})
